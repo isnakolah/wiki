@@ -1,10 +1,9 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    CSS
+    {{ name }}
 {% endblock title %}
 
 {% block body %}
-    {{ encyclopedia:css }}
+    {{ content | safe }}
 {% endblock body %}
-<h1>css</h1>

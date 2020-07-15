@@ -1,6 +1,5 @@
 from django.shortcuts import render
-import markdown2
-
+import markdown2 as markdown
 from . import util
 
 app_name = "encyclopedia"
@@ -9,8 +8,24 @@ def index(request):
         "entries": util.list_entries()
     })
 
-def css(request):
-    html = markdown2.markdown_path(util.get_entry(css))
-    return render(request, "encyclopedia/css.html", {
-        "content": html
+def view_page(request, title):
+    markdowner = markdown.Markdown()
+    file_name = ""
+    
+    # Checking if the title is valid
+    if title.casefold() not in (entry.casefold() for entry in util.list_entries()):
+        return render(request, "encyclopedia/page_not_found.html", {
+            "name": title
+        })
+    else:
+        for entry in util.list_entries():
+            if entry.casefold() == title:
+                file_name = entry
+
+    f = util.get_entry(file_name)
+    content = markdowner.convert(f)
+    return render(request, "encyclopedia/view_page.html", {
+        "content": content,
+        "name": title
     })
+
