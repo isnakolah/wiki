@@ -30,24 +30,25 @@ def md_to_html(file_name):
     markdowner = markdown.Markdown()
     # get the markdown file
     f = util.get_entry(file_name)
-    return markdowner.convert(f)
+    return markdowner.convert(f) 
 
 
-def verify(title):
-    '''
-    '''
-    entries = util.list_entries()
-    # Checking if the title is valid - caseinsensitive
-    if title.casefold() not in (entry.casefold() for entry in entries):
-        # If page is not valid, render the 404 page.
-        return HttpResponse(f"Error 404, Page not found\n{title} page you are looking for cannot be found.")
-    else:
-        # If valid, attach the entry name to be used in the rendering of the url
-        for entry in entries:
-            if entry.casefold() == title:
-                title_name = entry
+# def verify(title):
+#     '''
+#     '''
+#     title_name = ""
+#     entries = util.list_entries()
+#     # Checking if the title is valid - caseinsensitive
+#     if title.casefold() not in (entry.casefold() for entry in entries):
+#         # If page is not valid, render the 404 page.
+#         return HttpResponse(f"Error 404, Page not found\n{title} page you are looking for cannot be found.")
+#     else:
+#         # If valid, attach the entry name to be used in the rendering of the url
+#         for entry in entries:
+#             if entry.casefold() == title:
+#                 title_name = entry
 
-    return title_name
+#     return str(title_name)
 
 
 def view_page(request, title):
@@ -65,7 +66,9 @@ def view_page(request, title):
     # Checking if the title is valid - caseinsensitive
     if title.casefold() not in (entry.casefold() for entry in entries):
         # If page is not valid, render the 404 page.
-        return render(request, "encyclopedia/page_not_found.html")
+        return render(request, "encyclopedia/page_not_found.html", {
+            "name":title
+        })
     else:
         # If valid, attach the entry name to be used in the rendering of the url
         for entry in entries:
@@ -73,7 +76,7 @@ def view_page(request, title):
                 file_name = entry
 
     # Converting the markdown to html to render to page
-    content = md_to_html(file_name)
+    content = md_to_html(file_name) 
     return render(request, "encyclopedia/view_page.html", {
         "content": content,
         "name": file_name,
