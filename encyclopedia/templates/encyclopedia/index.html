@@ -9,7 +9,7 @@
 
     <ul>
         {% for entry in entries %}
-            <li><a href="{{ encyclopedia.redirect }}">{{ entry }}</a></li>
+            <li><a href="/{{ entry.casefold }}">{{ entry }}</a></li>
         {% endfor %}
     </ul>   
 
